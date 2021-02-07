@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import csv 
 
 def get_book_informations(book_url) :
-    # url = "http://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html"
 
     url = book_url
     response = requests.get(url)
@@ -16,7 +15,10 @@ def get_book_informations(book_url) :
         book_page_url = response.url
         book_info["product_page_url"] = book_page_url
 
-        book_description = soup.find_all("p")[-1].text.replace(",", " ")
+        book_description = ""
+        book_description_tag = soup.find("article", {"class": "product_page"}).findChildren('p',recursive=False)
+        for element in book_description_tag :
+            book_description = element.text
         book_info["product_description"] = book_description
 
         book_title = soup.find('h1').text
@@ -38,13 +40,41 @@ def get_book_informations(book_url) :
         book_info.update(extra_book_info)
         book_info.pop("tax")
 
-
-        with open('book_info.csv', 'w') as f:  
-            w = csv.DictWriter(f, book_info.keys())
-            w.writeheader()
+        with open('book_info.csv', 'a') as file:  
+            w = csv.DictWriter(file, book_info.keys())
+            if file.tell() == 0:
+                w.writeheader()
             w.writerow(book_info)
 
 
+def get_all_books_from_category(category_url):
+
+    url = category_url
+    response = requests.get(url)
+
+    if response.ok :
+        soup = BeautifulSoup(response.text, 'lxml')
+
+        all_book_from_category = soup.find_all("h3")
+        all_book_from_category_list = []
+        for book in all_book_from_category :
+            book_incomplete_url = book.find("a")["href"]
+            book_page_url ='http://books.toscrape.com/catalogue' + book_incomplete_url.replace('../../..','')
+            all_book_from_category_list.append(book_page_url)
+
+        for url in all_book_from_category_list :
+            get_book_informations(url)
+            print(url)
+
+        try :
+            next_page_url = soup.find("li", {"class": "next"}).find("a")["href"]
+            url_page = category_url.rsplit('/', 1)[-1]
+            get_all_books_from_category(category_url.replace(url_page, next_page_url))
+        except :
+            pass
 
 
-get_book_informations("http://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
+
+get_all_books_from_category("http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html")
+
+
