@@ -46,6 +46,19 @@ def get_book_informations(book_url, category_name) :
                 w.writeheader()
             w.writerow(book_info)
 
+        with open('images/' + book_title + '.jpg', 'wb') as handle:
+            response = requests.get(book_image_url, stream=True)
+            print(image_url)
+
+            if not response.ok:
+                print(response)
+
+            for block in response.iter_content(1024):
+                if not block:
+                    break
+
+                handle.write(block)
+
 
 def get_all_books_from_category(category_url, category_name):
 
@@ -102,3 +115,18 @@ def get_all_category(page_url):
 
 get_all_category("http://books.toscrape.com/catalogue/category/books_1/index.html")
 
+
+# url = "http://books.toscrape.com/media/cache/fe/72/fe72f0532301ec28892ae79a629a293c.jpg"
+# response = requests.get(url)
+
+# with open('images/pic1.jpg', 'wb') as handle:
+#         response = requests.get(url, stream=True)
+
+#         if not response.ok:
+#             print(response)
+
+#         for block in response.iter_content(1024):
+#             if not block:
+#                 break
+
+#             handle.write(block)
