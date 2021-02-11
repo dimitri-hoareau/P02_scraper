@@ -75,6 +75,34 @@ def get_all_books_from_category(category_url):
 
 
 
-get_all_books_from_category("http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html")
+# get_all_books_from_category("http://books.toscrape.com/catalogue/category/books/fantasy_19/index.html")
 
+
+def get_all_category(page_url):
+
+    url = page_url
+    response = requests.get(url)
+
+    if response.ok:
+        soup = BeautifulSoup(response.text, 'lxml')
+
+        all_category_from_page = soup.find("ul", {"class": "nav nav-list"}).find("li").find_all("a")
+
+        all_category_from_page_url = {}
+        for category in all_category_from_page:
+            category_name_without_white_space = category.text.replace("\n", "")
+            category_name = category_name_without_white_space.replace(" ", "")
+
+            category_url = 'http://books.toscrape.com/catalogue/category/' + category["href"].replace('../','')
+
+            all_category_from_page_url[category_name] = category_url
+        all_category_from_page_url.pop("Books")
+
+        for category_name in all_category_from_page_url :
+            url = all_category_from_page_url[category_name]
+            # get_all_books_from_category(url)
+            print(category_name)
+            print(url)
+
+get_all_category("http://books.toscrape.com/catalogue/category/books_1/index.html")
 
