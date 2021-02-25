@@ -5,11 +5,11 @@ from package.book_scraper import get_all_books_from_category
 
 def get_all_category(page_url):
 
-    """ 
-    This function is used to scrap all book's category on the website called on parameter. For each category finded, 
-    it will call the function get_all_books_from_category(), imported from package.book_scraper.py
     """
-    
+    This function is used to scrap all book's category on the website called on parameter.
+    For each category finded, it will call the function get_all_books_from_category(),
+    imported from package.book_scraper.py
+    """
     url = page_url
     response = requests.get(url)
 
@@ -23,18 +23,16 @@ def get_all_category(page_url):
             category_name_without_white_space = category.text.replace("\n", "")
             category_name = category_name_without_white_space.replace(" ", "")
 
-            category_url = 'http://books.toscrape.com/catalogue/category/' + category["href"].replace('../','')
+            category_url = ('http://books.toscrape.com/catalogue/category/' + category["href"]
+            .replace('../',''))
 
             all_category_from_page_url[category_name] = category_url
         all_category_from_page_url.pop("Books")
 
         for category_name in all_category_from_page_url :
+            print("*----------- getting all books and images from category : " + category_name + "---------------------*")
             url = all_category_from_page_url[category_name]
             get_all_books_from_category(url, category_name)
 
 
 get_all_category("http://books.toscrape.com/catalogue/category/books_1/index.html")
-
-
-# https://stackoverflow.com/questions/58043871/beautifulsoup-replace-single-quote-with-%C3%A2%E2%82%AC%CB%9C-when-writing-to-csv-file
-# https://tedboy.github.io/bs4_doc/10_encodings.html#encodings
