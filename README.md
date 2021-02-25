@@ -15,8 +15,9 @@ Python 3.8.5
 ## Getting Started
 
 To start this project, you need to :
-- clone the repo from this page. 
-- launch the app with the command : python3 app.py
+- clone the repo from this page.
+- if you want to running the app on a virtual environnment, create it and launch it after installing packages. 
+- launch the app with python
 
 ### Prerequisites
 
