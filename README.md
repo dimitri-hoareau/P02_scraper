@@ -5,6 +5,9 @@ Python book scrapin app
 
 Python book scrapping is an app used to parse throught a the website http://books.toscrape.com/ to extract all the date for building a csv file for each book's category. It can also extract all the main image from the book info's page.
 
+### Tested With
+Python 3.8.5
+
 ### Built With
 
 * [Python](https://www.python.org/)
