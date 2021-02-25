@@ -17,13 +17,15 @@ Python 3.8.5
 To start this project, you need to :
 - clone the repo from this page.
 - if you want to running the app on a virtual environnment, create it and launch it after installing packages :
-  ```
+ ```
 python -m venv env
-  ```
-    ```
-pip install <package-name>
-  ```
-
+```
+ ```
+source env/bin/activate
+```
+ ```
+pip install -r requirements.txt
+```
 
 - launch the app with python
 
